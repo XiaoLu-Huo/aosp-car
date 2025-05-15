@@ -13,3 +13,4 @@
 .externalNativeBuild
 .cxx
 local.properties
+/car-builtin-lib/src/main/java/android/car/builtin/util/EventLogTags.java
