@@ -13,9 +13,9 @@ kotlin {
 }
 
 dependencies {
-    compileOnly(files("${project.projectDir}/libs/framework.jar"))
-    compileOnly(files("${project.projectDir}/libs/framework-bluetooth.jar"))
-    compileOnly(files("${project.projectDir}/libs/core-libart.jar"))
+    compileOnly(files("${rootProject.projectDir}/libs/framework.jar"))
+    compileOnly(files("${rootProject.projectDir}/libs/framework-bluetooth.jar"))
+    compileOnly(files("${rootProject.projectDir}/libs/core-libart.jar"))
 
 }
 
