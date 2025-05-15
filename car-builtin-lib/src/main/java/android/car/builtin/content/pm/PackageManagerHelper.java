@@ -20,6 +20,7 @@ import android.annotation.NonNull;
 import android.annotation.Nullable;
 import android.annotation.SystemApi;
 import android.annotation.UserIdInt;
+import android.app.ActivityManager;
 import android.app.ActivityThread;
 import android.content.ComponentName;
 import android.content.Context;
@@ -87,7 +88,7 @@ public final class PackageManagerHelper {
         } catch (RuntimeException e) {
             throw new IllegalStateException("Invalid component name defined by "
                     + "com.android.internal.R.string.config_systemUIServiceComponent resource: "
-                    + flattenName);
+                    + flattenName, e);
         }
     }
 
@@ -163,5 +164,31 @@ public final class PackageManagerHelper {
     /** Check {@link ComponentInfo#getComponentName()}. */
     public static ComponentName getComponentName(ComponentInfo info) {
         return info.getComponentName();
+    }
+
+    /** Check PackageManagerInternal#getSystemUiServiceComponent(). */
+    @NonNull
+    public static ComponentName getSystemUiServiceComponent(@NonNull Context context) {
+        String flattenName = context.getResources()
+                .getString(com.android.internal.R.string.config_systemUIServiceComponent);
+        if (TextUtils.isEmpty(flattenName)) {
+            throw new IllegalStateException("No "
+                    + "com.android.internal.R.string.config_systemUIServiceComponent resource");
+        }
+        return ComponentName.unflattenFromString(flattenName);
+    }
+
+    /** Check {@link ActivityManager#forceStopPackageAsUser}. */
+    public static void forceStopPackageAsUser(@NonNull Context context, @NonNull String packageName,
+            @UserIdInt int userId) {
+        ActivityManager am = context.getSystemService(ActivityManager.class);
+        am.forceStopPackageAsUser(packageName, userId);
+    }
+
+    /** Check {@link ActivityManager#forceStopPackageAsUserEvenWhenStopping}. */
+    public static void forceStopPackageAsUserEvenWhenStopping(@NonNull Context context,
+            @NonNull String packageName, @UserIdInt int userId) {
+        ActivityManager am = context.getSystemService(ActivityManager.class);
+        am.forceStopPackageAsUserEvenWhenStopping(packageName, userId);
     }
 }

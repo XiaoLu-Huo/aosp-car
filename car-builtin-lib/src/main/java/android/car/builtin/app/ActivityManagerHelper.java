@@ -16,9 +16,12 @@
 
 package android.car.builtin.app;
 
+import android.Manifest;
 import android.annotation.NonNull;
+import android.annotation.RequiresPermission;
 import android.annotation.SystemApi;
 import android.annotation.UserIdInt;
+import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.ActivityOptions;
 import android.app.ActivityTaskManager;
@@ -27,8 +30,10 @@ import android.app.IActivityManager;
 import android.app.IProcessObserver;
 import android.car.builtin.util.Slogf;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.os.RemoteException;
 
+import java.util.List;
 import java.util.concurrent.Callable;
 
 /**
@@ -40,6 +45,10 @@ public final class ActivityManagerHelper {
 
     /** Invalid task ID. */
     public static final int INVALID_TASK_ID = ActivityTaskManager.INVALID_TASK_ID;
+
+    /** Persistent process flag */
+    public static final int PROCESS_INFO_PERSISTENT_FLAG =
+            ActivityManager.RunningAppProcessInfo.FLAG_PERSISTENT;
 
     private static final String TAG = "CAR.AM";  // CarLog.TAG_AM
 
@@ -67,6 +76,19 @@ public final class ActivityManagerHelper {
     }
 
     /**
+     * See {@code android.app.IActivityManager.startUserInBackgroundVisibleOnDisplay}.
+     *
+     * @throws IllegalStateException if ActivityManager binder throws RemoteException
+     */
+    public static boolean startUserInBackgroundVisibleOnDisplay(@UserIdInt int userId,
+            int displayId) {
+        return runRemotely(() -> getActivityManager().startUserInBackgroundVisibleOnDisplay(
+                        userId, displayId, /* unlockProgressListener= */ null),
+                "error while startUserInBackgroundVisibleOnDisplay userId:%d displayId:%d",
+                userId, displayId);
+    }
+
+    /**
      * See {@code android.app.IActivityManager.startUserInForegroundWithListener}.
      *
      * @throws IllegalStateException if ActivityManager binder throws RemoteException
@@ -79,15 +101,30 @@ public final class ActivityManagerHelper {
     }
 
     /**
+     * See {@code android.app.IActivityManager.stopUser}.
+     *
+     * @throws IllegalStateException if ActivityManager binder throws RemoteException
+     */
+    public static int stopUser(@UserIdInt int userId, boolean force) {
+        // Note that the value of force is irrelevant. Even historically, it never had any effect
+        // in this case, since it only even applied to profiles (which Car didn't support).
+        return runRemotely(
+                () -> getActivityManager().stopUserWithCallback(userId, /* callback= */ null),
+                "error while stopUser userId:%d force:%b", userId, force);
+    }
+
+    /**
      * See {@code android.app.IActivityManager.stopUserWithDelayedLocking}.
      *
      * @throws IllegalStateException if ActivityManager binder throws RemoteException
      */
     public static int stopUserWithDelayedLocking(@UserIdInt int userId, boolean force) {
+        // Note that the value of force is irrelevant. Even historically, it never had any effect
+        // in this case, since it only even applied to profiles (which Car didn't support).
         return runRemotely(
                 () -> getActivityManager().stopUserWithDelayedLocking(
-                        userId, force, /* callback= */ null),
-                "error while stopUserWithDelayedLocking %d", userId);
+                        userId, /* callback= */ null),
+                "error while stopUserWithDelayedLocking userId:%d force:%b", userId, force);
     }
 
     /**
@@ -96,8 +133,7 @@ public final class ActivityManagerHelper {
      * @throws IllegalStateException if ActivityManager binder throws RemoteException
      */
     public static boolean unlockUser(@UserIdInt int userId) {
-        return runRemotely(() -> getActivityManager().unlockUser(userId,
-                /* token= */ null, /* secret= */ null, /* listener= */ null),
+        return runRemotely(() -> getActivityManager().unlockUser2(userId, /* listener= */ null),
                 "error while unlocking user %d", userId);
     }
 
@@ -148,13 +184,13 @@ public final class ActivityManagerHelper {
     }
 
     /**
-     * Makes the root task of the given taskId focused.
+     * Makes the task of the given taskId focused.
      */
-    public static void setFocusedRootTask(int taskId) {
+    public static void setFocusedTask(int taskId) {
         try {
-            getActivityManager().setFocusedRootTask(taskId);
+            ActivityTaskManager.getService().setFocusedTask(taskId);
         } catch (RemoteException e) {
-            Slogf.e(TAG, "Failed to setFocusedRootTask", e);
+            Slogf.e(TAG, "Failed to setFocusedTask", e);
         }
     }
 
@@ -171,6 +207,31 @@ public final class ActivityManagerHelper {
     }
 
     /**
+     * Gets the flag values for the given {@link ActivityManager.RunningAppProcessInfo}
+     *
+     * @param appProcessInfo The {@link ActivityManager.RunningAppProcessInfo}
+     * @return The flags for the appProcessInfo
+     */
+    public static int getFlagsForRunningAppProcessInfo(
+            @NonNull ActivityManager.RunningAppProcessInfo appProcessInfo) {
+        return appProcessInfo.flags;
+    }
+
+    /**
+     * Gets all the running app process
+     *
+     * @return List of all the RunningAppProcessInfo
+     */
+    public static List<ActivityManager.RunningAppProcessInfo> getRunningAppProcesses() {
+        try {
+            return getActivityManager().getRunningAppProcesses();
+        } catch (RemoteException e) {
+            Slogf.e(TAG, "Failed to removeTask", e);
+        }
+        return List.of();
+    }
+
+    /**
      * Callback to monitor Processes in the system
      */
     public abstract static class ProcessObserverCallback {
@@ -181,7 +242,6 @@ public final class ActivityManagerHelper {
         public void onProcessDied(int pid, int uid) {}
 
         final IProcessObserver.Stub mIProcessObserver = new IProcessObserver.Stub() {
-
             @Override
             public void onForegroundActivitiesChanged(
                     int pid, int uid, boolean foregroundActivities) throws RemoteException {
@@ -192,6 +252,12 @@ public final class ActivityManagerHelper {
             @Override
             public void onForegroundServicesChanged(int pid, int uid, int fgServiceTypes)
                     throws RemoteException {
+                // Not used
+            }
+
+            @Override
+            public void onProcessStarted(int pid, int processUid, int packageUid,
+                    String packageName, String processName) {
                 // Not used
             }
 
@@ -234,5 +300,63 @@ public final class ActivityManagerHelper {
     public static int checkComponentPermission(@NonNull String permission, int uid, int owningUid,
             boolean exported) {
         return ActivityManager.checkComponentPermission(permission, uid, owningUid, exported);
+    }
+
+    /** See {@link android.app.ActivityTaskManager#getTasks(int, boolean, boolean, int)} */
+    public static List<ActivityManager.RunningTaskInfo> getTasks(int maxNum,
+            boolean filterOnlyVisibleRecents, boolean keepIntentExtra, int displayId) {
+        return ActivityTaskManager.getInstance().getTasks(maxNum, filterOnlyVisibleRecents,
+                keepIntentExtra, displayId);
+    }
+
+    /**
+     * Same as {@link ActivityManager#killAllBackgroundProcesses()}
+     */
+    public static void killAllBackgroundProcesses() {
+        try {
+            getActivityManager().killAllBackgroundProcesses();
+        } catch (RemoteException e) {
+            Slogf.e(TAG, "Failed to kill background apps", e);
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * Same as {@link ActivityManager#killUid()}
+     */
+    public static void killUid(int appId, int userId, String reason) {
+        try {
+            getActivityManager().killUid(appId, userId, reason);
+        } catch (RemoteException e) {
+            Slogf.e(TAG, "Failed to call app : %d , userId: %d, kill reason: %s", appId, userId,
+                    reason);
+            throw new RuntimeException(e);
+        }
+    }
+
+    /** See {@link Activity#getActivityToken()} */
+    public static IBinder getActivityToken(Activity activity) {
+        return activity.getActivityToken();
+    }
+
+    /** See {@link Activity#isVisibleForAutofill()} */
+    public static boolean isVisible(Activity activity) {
+        return activity.isVisibleForAutofill();
+    }
+
+    /**
+     * Moves the given {@code RootTask} to the specified {@code Display}.
+     *
+     * @param taskId    the id of the target {@code RootTask} to move
+     * @param displayId the displayId to move the {@code RootTask} to
+     */
+    @RequiresPermission(Manifest.permission.INTERNAL_SYSTEM_WINDOW)
+    public static void moveRootTaskToDisplay(int taskId, int displayId) {
+        try {
+            ActivityTaskManager.getService().moveRootTaskToDisplay(taskId, displayId);
+        } catch (RemoteException e) {
+            Slogf.e(TAG, "Error moving task %d to display %d", e, taskId, displayId);
+            throw new RuntimeException(e);
+        }
     }
 }

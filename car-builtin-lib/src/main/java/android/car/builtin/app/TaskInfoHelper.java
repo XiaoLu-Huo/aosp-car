@@ -20,6 +20,8 @@ import android.annotation.NonNull;
 import android.annotation.Nullable;
 import android.annotation.SystemApi;
 import android.app.TaskInfo;
+import android.graphics.Rect;
+import android.os.IBinder;
 
 /**
  * Provides the access to the hidden fields of {@code android.app.TaskInfo}.
@@ -43,6 +45,11 @@ public class TaskInfoHelper {
         return task.isVisible && task.isRunning && !task.isSleeping;
     }
 
+    /** Returns the binder token of the task. */
+    public static IBinder getToken(@NonNull TaskInfo task) {
+        return task.token.asBinder();
+    }
+
     /** Returns the string representation of the task */
     public static String toString(@Nullable TaskInfo task) {
         if (task == null) {
@@ -59,6 +66,12 @@ public class TaskInfoHelper {
                 + " topActivity=" + task.topActivity
                 + " baseIntent=" + task.baseIntent + " baseActivity=" + task.baseActivity
                 + "}";
+    }
+
+    /** Returns the task bounds */
+    @NonNull
+    public static Rect getBounds(@NonNull TaskInfo task) {
+        return task.getConfiguration().windowConfiguration.getBounds();
     }
 
     private TaskInfoHelper() {

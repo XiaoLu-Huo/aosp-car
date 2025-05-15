@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 The Android Open Source Project
+ * Copyright (C) 2022 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,21 +14,27 @@
  * limitations under the License.
  */
 
-package android.car.builtin;
+package android.car.builtin.view;
 
+import android.annotation.NonNull;
 import android.annotation.SystemApi;
+import android.view.InputEvent;
 
 /**
- * Helper for Permissions
- *
+ * Provides access to {@code android.view.InputEvent} calls.
  * @hide
  */
 @SystemApi(client = SystemApi.Client.MODULE_LIBRARIES)
-public final class PermissionHelper {
-    private PermissionHelper() {
+public final class InputEventHelper {
+
+    private InputEventHelper() {
         throw new UnsupportedOperationException();
     }
 
-    /** MONITOR_INPUT permission */
-    public static final String MONITOR_INPUT = android.Manifest.permission.MONITOR_INPUT;
+    /**
+     * Sets the display id for the input event passed as argument.
+     */
+    public static void setDisplayId(@NonNull InputEvent inputEvent, int newDisplayId) {
+        inputEvent.setDisplayId(newDisplayId);
+    }
 }

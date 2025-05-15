@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 The Android Open Source Project
+ * Copyright (C) 2022 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,21 +14,29 @@
  * limitations under the License.
  */
 
-package android.car.builtin;
+package android.car.builtin.os;
 
 import android.annotation.SystemApi;
+import android.os.Process;
 
 /**
- * Helper for Permissions
+ * Helper for {@link Process}.
  *
  * @hide
  */
 @SystemApi(client = SystemApi.Client.MODULE_LIBRARIES)
-public final class PermissionHelper {
-    private PermissionHelper() {
+public final class ProcessHelper {
+
+    /** See {@code Process.THREAD_GROUP_DEFAULT} */
+    public static final int THREAD_GROUP_DEFAULT = Process.THREAD_GROUP_DEFAULT;
+
+    /** See {@code Process.THREAD_GROUP_FOREGROUND} */
+    public static final int THREAD_GROUP_FOREGROUND = 1;
+
+    /** See {@code Process.THREAD_GROUP_TOP_APP} */
+    public static final int THREAD_GROUP_TOP_APP = Process.THREAD_GROUP_TOP_APP;
+
+    private ProcessHelper()  {
         throw new UnsupportedOperationException();
     }
-
-    /** MONITOR_INPUT permission */
-    public static final String MONITOR_INPUT = android.Manifest.permission.MONITOR_INPUT;
 }

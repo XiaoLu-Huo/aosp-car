@@ -43,6 +43,11 @@ public final class ContextHelper {
         return context.getDisplayId();
     }
 
+    /** Returns associated display id relevant for the context */
+    public static int getAssociatedDisplayId(@NonNull Context context) {
+        return context.getAssociatedDisplayId();
+    }
+
     /**
      * Same as {@code context.startActivityAsUser(intent, options, user)}.
      */

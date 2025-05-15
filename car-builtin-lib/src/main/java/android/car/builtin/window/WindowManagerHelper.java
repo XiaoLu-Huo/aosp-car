@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 The Android Open Source Project
+ * Copyright (C) 2023 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,29 +14,33 @@
  * limitations under the License.
  */
 
-package android.car.builtin.view;
+package android.car.builtin.window;
 
 import android.annotation.NonNull;
 import android.annotation.SystemApi;
-import android.view.KeyEvent;
+import android.view.WindowManager;
 
 /**
- * Provides access to {@code android.view.KeyEvent} calls.
+ * A helper class to access hidden functionality in {@link WindowManager}.
  * @hide
  */
 @SystemApi(client = SystemApi.Client.MODULE_LIBRARIES)
-public final class KeyEventHelper {
-
-    private KeyEventHelper() {
-        throw new UnsupportedOperationException();
+public final class WindowManagerHelper {
+    /**
+     * See {@link WindowManager.LayoutParams#inputFeatures}}.
+     */
+    public static void setInputFeatureSpy(@NonNull WindowManager.LayoutParams p) {
+        p.inputFeatures = WindowManager.LayoutParams.INPUT_FEATURE_SPY;
     }
 
     /**
-     * Sets the display id for the key event passed as argument.
-     * @deprecated Use {@link InputEventHelper} instead of this class.
+     * See {@link WindowManager.LayoutParams#privateFlags}}.
      */
-    @Deprecated
-    public static void setDisplayId(@NonNull KeyEvent keyEvent, int newDisplayId) {
-        keyEvent.setDisplayId(newDisplayId);
+    public static void setTrustedOverlay(@NonNull WindowManager.LayoutParams p) {
+        p.setTrustedOverlay();
+    }
+
+    private WindowManagerHelper() {
+        throw new UnsupportedOperationException();
     }
 }

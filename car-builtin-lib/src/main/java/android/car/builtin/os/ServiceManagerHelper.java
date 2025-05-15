@@ -56,4 +56,10 @@ public final class ServiceManagerHelper {
     public static void addService(@NonNull String name, @NonNull IBinder service) {
         ServiceManager.addService(name, service);
     }
+
+    /** Check {@link ServiceManager#getDeclaredInstances(String)} */
+    @Nullable
+    public static String[] getDeclaredInstances(@NonNull String iface) {
+        return ServiceManager.getDeclaredInstances(iface);
+    }
 }

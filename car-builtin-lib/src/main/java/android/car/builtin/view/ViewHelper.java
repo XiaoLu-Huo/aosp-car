@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 The Android Open Source Project
+ * Copyright (C) 2023 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,25 +18,31 @@ package android.car.builtin.view;
 
 import android.annotation.NonNull;
 import android.annotation.SystemApi;
-import android.view.KeyEvent;
+import android.graphics.Rect;
+import android.view.SurfaceView;
+import android.view.View;
 
 /**
- * Provides access to {@code android.view.KeyEvent} calls.
+ * Provides access to a view {@link View} related hidden APIs.
  * @hide
  */
 @SystemApi(client = SystemApi.Client.MODULE_LIBRARIES)
-public final class KeyEventHelper {
-
-    private KeyEventHelper() {
-        throw new UnsupportedOperationException();
+public final class ViewHelper {
+    /**
+     * See {@link View#getBoundsOnScreen(Rect)}}.
+     */
+    public static void getBoundsOnScreen(@NonNull View v, @NonNull Rect outRect) {
+        v.getBoundsOnScreen(outRect);
     }
 
     /**
-     * Sets the display id for the key event passed as argument.
-     * @deprecated Use {@link InputEventHelper} instead of this class.
+     * See {@link SurfaceView#setResizeBackgroundColor(int)}}.
      */
-    @Deprecated
-    public static void setDisplayId(@NonNull KeyEvent keyEvent, int newDisplayId) {
-        keyEvent.setDisplayId(newDisplayId);
+    public static void seResizeBackgroundColor(@NonNull SurfaceView surfaceView, int color) {
+        surfaceView.setResizeBackgroundColor(color);
+    }
+
+    private ViewHelper() {
+        throw new UnsupportedOperationException();
     }
 }

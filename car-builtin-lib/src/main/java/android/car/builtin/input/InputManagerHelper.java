@@ -19,6 +19,8 @@ package android.car.builtin.input;
 import android.annotation.NonNull;
 import android.annotation.SystemApi;
 import android.hardware.input.InputManager;
+import android.os.IBinder;
+import android.view.View;
 
 /**
  * Helper for {@link InputManager}
@@ -42,5 +44,33 @@ public class InputManagerHelper {
     public static boolean injectInputEvent(@NonNull InputManager inputManager,
             @NonNull android.view.InputEvent event) {
         return inputManager.injectInputEvent(event, InputManager.INJECT_INPUT_EVENT_MODE_ASYNC);
+    }
+
+    /**
+     * See {@link InputManager#pilferPointers(IBinder)}.
+     */
+    public static void pilferPointers(@NonNull InputManager inputManager, @NonNull View v) {
+        inputManager.pilferPointers(v.getViewRootImpl().getInputToken());
+    }
+
+    /**
+     * See {@link InputManager#addUniqueIdAssociationByDescriptor(String, String)}.
+     */
+    public static void addUniqueIdAssociationByDescriptor(@NonNull InputManager inputManager,
+            @NonNull String inputDeviceDescriptor,
+            @NonNull String displayUniqueId) {
+        // TODO(b/341949977): Improve addUniqueIdAssociationByDescriptor to handle incorrect
+        // input
+        inputManager.addUniqueIdAssociationByDescriptor(inputDeviceDescriptor, displayUniqueId);
+    }
+
+    /**
+     * See {@link InputManager#removeUniqueIdAssociationByDescriptor(String)}.
+     */
+    public static void removeUniqueIdAssociationByDescriptor(@NonNull InputManager inputManager,
+            @NonNull String inputDeviceDescriptor) {
+        // TODO(b/341949977): Improve removeUniqueIdAssociationByDescriptor to handle incorrect
+        // input
+        inputManager.removeUniqueIdAssociationByDescriptor(inputDeviceDescriptor);
     }
 }
