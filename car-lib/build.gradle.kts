@@ -83,6 +83,7 @@ dependencies {
     compileOnly(files("${rootProject.projectDir}/libs/framework.jar"))
     compileOnly(files("${rootProject.projectDir}/libs/framework-wifi.jar"))
     compileOnly(files("${rootProject.projectDir}/libs/core-libart.jar"))
+    compileOnly(files("${rootProject.projectDir}/libs/android-car.jar"))
 
     implementation(project(":car-builtin-lib"))
     implementation(libs.androidx.core.ktx)
