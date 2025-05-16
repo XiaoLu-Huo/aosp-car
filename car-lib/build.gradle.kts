@@ -100,3 +100,23 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 }
+
+// 此脚本通过解压 AAR 并提取 classes.jar，模拟了 AOSP 生成 android.car.jar 的过程
+// 适用场景：当项目因依赖 AIDL 或 Android 资源而必须使用 Android 库模块，但最终需要纯 JAR 文件时。
+tasks.create<Copy>("unzipAar") {
+    description = "Assembles android.car.jar"
+    group = "Build"
+    mustRunAfter("build")
+
+    from(zipTree("${project.projectDir}/build/outputs/aar/car-lib-debug.aar"))
+    include("classes.jar")
+    into("${project.projectDir}/build/libs")
+    rename("classes.jar", "android.car.jar")
+
+    doLast {
+        println("Assembles android.car.jar")
+    }
+}
+// 在 build.gradle.kts 中添加依赖，使 unzipAar 自动在构建后执行：
+tasks.getByName("build").finalizedBy("unzipAar")
+
