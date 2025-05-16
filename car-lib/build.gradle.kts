@@ -54,11 +54,17 @@ afterEvaluate { // 'this' in afterEvaluate is the Project
         // or via this.project.rootProject if needed, but rootProject should resolve correctly.
         val customFrameworkJar = rootProject.file("libs/framework.jar")
         val customFrameworkWifiJar = rootProject.file("libs/framework-wifi.jar")
+        val customCoreLibArtJar = rootProject.file("libs/core-libart.jar")
+        val customLocationJar = rootProject.file("libs/framework-location.jar")
 
         // 创建一个 FileCollection 包含您的自定义 JAR
         // 'this.project' refers to the project to which this JavaCompile task belongs.
         // Using 'this.project.files(...)' is explicit.
-        val customLibs = this.project.files(customFrameworkJar, customFrameworkWifiJar).filter { it.exists() }
+        val customLibs = this.project
+            .files(
+                customFrameworkJar, customFrameworkWifiJar, customCoreLibArtJar, customLocationJar
+            )
+            .filter { it.exists() }
 
         if (!customLibs.isEmpty) {
             // 将自定义 JAR 预置到现有编译类路径的前面
@@ -70,8 +76,8 @@ afterEvaluate { // 'this' in afterEvaluate is the Project
         } else {
             // 如果 JAR 文件未找到，打印警告
             // 'name' here refers to 'this.name'
-            println("Warning: Custom JARs (framework.jar, framework-wifi.jar) not found at specified paths for task ${name}.")
-            println("Searched paths: ${customFrameworkJar.absolutePath}, ${customFrameworkWifiJar.absolutePath}")
+            println("Warning: Custom JARs not found at specified paths for task ${name}.")
+            println("Searched paths: ${customFrameworkJar.absolutePath}, ${customFrameworkWifiJar.absolutePath},${customCoreLibArtJar.absolutePath}")
         }
 
         // 确保移除或注释掉旧的 bootstrapClasspath 配置
@@ -84,6 +90,7 @@ dependencies {
     compileOnly(files("${rootProject.projectDir}/libs/framework-wifi.jar"))
     compileOnly(files("${rootProject.projectDir}/libs/core-libart.jar"))
     compileOnly(files("${rootProject.projectDir}/libs/android-car.jar"))
+    compileOnly(files("${rootProject.projectDir}/libs/framework-location.jar"))
 
     implementation(project(":car-builtin-lib"))
     implementation(libs.androidx.core.ktx)
