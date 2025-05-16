@@ -11,7 +11,7 @@ material = "1.12.0"
 protobuf = "0.9.4"
 protobuf-lite = "3.0.1"
 protoc-protoc = "3.21.12"
-protoc-gen-javalite = "3.0.0"
+protoc-gen-javalite = "3.0.0:osx-x86_64"
 protobuf-javalite = "3.21.12"
 
 

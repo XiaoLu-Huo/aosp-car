@@ -63,7 +63,8 @@ dependencies {
     compileOnly(files("${rootProject.projectDir}/libs/framework-statsd.jar"))
     compileOnly(files("${rootProject.projectDir}/libs/framework-tethering.jar"))
 
-//    implementation(project(":car-lib"))
+    implementation(project(":car-lib"))
+    implementation(project(":car-builtin-lib"))
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
