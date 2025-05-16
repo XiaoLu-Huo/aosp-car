@@ -23,3 +23,4 @@ rootProject.name = "CarService"
 include(":automotive")
 include(":car-builtin-lib")
 include(":car-lib")
+include(":car-service")

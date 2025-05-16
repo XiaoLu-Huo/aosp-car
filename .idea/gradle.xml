@@ -13,6 +13,7 @@
             <option value="$PROJECT_DIR$/automotive" />
             <option value="$PROJECT_DIR$/car-builtin-lib" />
             <option value="$PROJECT_DIR$/car-lib" />
+            <option value="$PROJECT_DIR$/car-service" />
           </set>
         </option>
       </GradleProjectSettings>
