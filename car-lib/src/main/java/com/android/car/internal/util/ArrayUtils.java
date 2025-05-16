@@ -25,8 +25,6 @@ import android.util.ArraySet;
 
 import com.android.car.internal.ExcludeFromCodeCoverageGeneratedReport;
 
-import dalvik.system.VMRuntime;
-
 import java.io.File;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -56,7 +54,7 @@ public final class ArrayUtils {
 
     /** See {@link VMRuntime#newUnpaddedArray} for details. */
     public static long[] newUnpaddedLongArray(int minLen) {
-        return (long[]) VMRuntime.getRuntime().newUnpaddedArray(long.class, minLen);
+        return new long[minLen];
     }
 
     /**

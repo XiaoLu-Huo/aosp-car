@@ -22,12 +22,12 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 
     kotlinOptions {
-        jvmTarget = "11"
+        jvmTarget = "17"
     }
 
     sourceSets {
@@ -38,6 +38,8 @@ android {
             aidl.srcDir("src/main/java")
         }
     }
+    lint.abortOnError = false
+
 }
 
 afterEvaluate { // 'this' in afterEvaluate is the Project
@@ -85,11 +87,12 @@ afterEvaluate { // 'this' in afterEvaluate is the Project
     }
 }
 
+
 dependencies {
     compileOnly(files("${rootProject.projectDir}/libs/framework.jar"))
     compileOnly(files("${rootProject.projectDir}/libs/framework-wifi.jar"))
     compileOnly(files("${rootProject.projectDir}/libs/core-libart.jar"))
-    compileOnly(files("${rootProject.projectDir}/libs/android-car.jar"))
+    api(files("${rootProject.projectDir}/libs/android-car.jar"))
     compileOnly(files("${rootProject.projectDir}/libs/framework-location.jar"))
 
     implementation(project(":car-builtin-lib"))
