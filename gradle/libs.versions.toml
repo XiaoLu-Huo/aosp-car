@@ -8,6 +8,12 @@ espressoCore = "3.6.1"
 appcompat = "1.7.0"
 jetbrainsKotlinJvm = "2.0.21"
 material = "1.12.0"
+protobuf = "0.9.4"
+protobuf-lite = "3.0.1"
+protoc-protoc = "3.21.12"
+protoc-gen-javalite = "3.0.0"
+protobuf-javalite = "3.21.12"
+
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -16,10 +22,17 @@ androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "j
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+protobuf-lite = { module = "com.google.protobuf:protobuf-lite", version.ref = "protobuf-lite" }
+protobuf-javalite = { module = "com.google.protobuf:protobuf-javalite", version.ref = "protobuf-javalite" }
+protoc-protoc = { module = "com.google.protobuf:protoc", version.ref = "protoc-protoc" }
+protoc-gen-javalite = { module = "com.google.protobuf:protoc-gen-javalite", version.ref = "protoc-gen-javalite" }
+
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "jetbrainsKotlinJvm" }
 android-library = { id = "com.android.library", version.ref = "agp" }
+protobuf = { id = "com.google.protobuf", version.ref = "protobuf" }
+
 
