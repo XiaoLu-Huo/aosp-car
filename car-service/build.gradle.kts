@@ -66,6 +66,7 @@ dependencies {
     implementation(project(":car-lib"))
     implementation(project(":car-builtin-lib"))
     implementation(project(":hardware-vehicle"))
+    implementation(project(":procfs-inspector"))
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)

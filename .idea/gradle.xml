@@ -15,6 +15,7 @@
             <option value="$PROJECT_DIR$/car-lib" />
             <option value="$PROJECT_DIR$/car-service" />
             <option value="$PROJECT_DIR$/hardware-vehicle" />
+            <option value="$PROJECT_DIR$/procfs-inspector" />
           </set>
         </option>
       </GradleProjectSettings>
