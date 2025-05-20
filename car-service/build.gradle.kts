@@ -34,6 +34,10 @@ android {
         jvmTarget = "17"
     }
     sourceSets["main"].proto { srcDir("src/main/proto") }
+    sourceSets["main"].aidl.srcDir("src/main/java")
+    buildFeatures {
+        aidl = true
+    }
 }
 
 protobuf {
