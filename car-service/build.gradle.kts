@@ -1,6 +1,10 @@
+import com.google.protobuf.gradle.id
+import com.google.protobuf.gradle.proto
+
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.protobuf)
 }
 
 android {
@@ -29,6 +33,25 @@ android {
     }
     kotlinOptions {
         jvmTarget = "17"
+    }
+    sourceSets["main"].proto { srcDir("src/main/proto") }
+}
+
+protobuf {
+    protoc {
+        artifact = libs.protoc.protoc.get().toString()
+    }
+    plugins {
+        id("javalite") {
+            artifact = libs.protoc.gen.javalite.get().toString()
+        }
+    }
+    generateProtoTasks {
+        all().forEach {
+            it.plugins {
+                id("javalite")
+            }
+        }
     }
 }
 
@@ -62,6 +85,9 @@ dependencies {
     compileOnly(files("${rootProject.projectDir}/libs/framework-connectivity-t.jar"))
     compileOnly(files("${rootProject.projectDir}/libs/framework-statsd.jar"))
     compileOnly(files("${rootProject.projectDir}/libs/framework-tethering.jar"))
+
+    api(libs.protobuf.lite)
+    api(libs.protobuf.javalite)
 
     implementation(project(":car-lib"))
     implementation(project(":car-builtin-lib"))

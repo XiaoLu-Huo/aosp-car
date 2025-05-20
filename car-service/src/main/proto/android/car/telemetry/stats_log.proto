@@ -24,7 +24,7 @@ package android.car.telemetry;
 option java_package = "com.android.car.telemetry";
 option java_outer_classname = "StatsLogProto";
 
-import "packages/services/Car/service/proto/android/car/telemetry/atoms.proto";
+import "android/car/telemetry/atoms.proto";
 
 message DimensionsValueTuple {
   repeated DimensionsValue dimensions_value = 1;
