@@ -29,7 +29,7 @@ package android.automotive.telemetry;
 option java_package = "com.android.automotive.telemetry";
 option java_outer_classname = "CarDataProto";
 
-import "packages/services/Car/cpp/telemetry/proto/evs.proto";
+import "com/android/automotive/telemetry/evs.proto";
 
 // Contains all the CarData messages to declare all the messages.
 // Unique protobuf number is used as an ID.
