@@ -61,9 +61,10 @@ afterEvaluate {
         val customFrameworkJar = rootProject.file("libs/framework.jar")
         val customFrameworkWifiJar = rootProject.file("libs/framework-wifi.jar")
         val customLocationJar = rootProject.file("libs/framework-location.jar")
+        val customBluetoothJar = rootProject.file("libs/framework-bluetooth.jar")
         val customLibs = this.project
             .files(
-                customFrameworkJar, customFrameworkWifiJar, customLocationJar
+                customFrameworkJar, customFrameworkWifiJar, customLocationJar, customBluetoothJar
             )
             .filter { it.exists() }
         if (!customLibs.isEmpty) {
@@ -81,6 +82,7 @@ dependencies {
     compileOnly(files("${rootProject.projectDir}/libs/core-libart.jar"))
     compileOnly(files("${rootProject.projectDir}/libs/android-car.jar"))
     compileOnly(files("${rootProject.projectDir}/libs/framework-location.jar"))
+    compileOnly(files("${rootProject.projectDir}/libs/framework-bluetooth.jar"))
 
     compileOnly(files("${rootProject.projectDir}/libs/framework-connectivity.jar"))
     compileOnly(files("${rootProject.projectDir}/libs/framework-connectivity-t.jar"))
