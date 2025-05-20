@@ -40,6 +40,11 @@ android {
     sourceSets["main"].java {
         srcDirs("src/main/java")
     }
+
+    sourceSets["main"].aidl.srcDir("src/main/java")
+    buildFeatures {
+        aidl = true
+    }
 }
 
 afterEvaluate {
