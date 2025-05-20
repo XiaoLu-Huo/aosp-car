@@ -18,8 +18,8 @@ syntax = "proto3";
 
 package android.automotive.watchdog;
 
-import "performance_stats.proto";
-import "health_check_client_info.proto";
+import "android/car/watchdog/performance_stats.proto";
+import "android/car/watchdog/health_check_client_info.proto";
 
 // Represents the CarWatchdog daemon dump.
 message CarWatchdogDaemonDump {

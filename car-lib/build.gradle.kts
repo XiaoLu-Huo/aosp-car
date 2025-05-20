@@ -1,6 +1,4 @@
-import com.google.protobuf.gradle.id
 import com.google.protobuf.gradle.proto
-import org.gradle.internal.declarativedsl.parsing.main
 
 plugins {
     alias(libs.plugins.android.library)
@@ -46,15 +44,13 @@ protobuf {
     protoc {
         artifact = libs.protoc.protoc.get().toString()
     }
-    plugins {
-        id("javalite") {
-            artifact = libs.protoc.gen.javalite.get().toString()
-        }
-    }
     generateProtoTasks {
-        all().forEach {
-            it.plugins {
-                id("javalite")
+        all().forEach { task ->
+            // For Android, Javalite is recommended for smaller code size.
+            task.builtins {
+                create("java") { // Use 'create' for safer configuration
+                    option("lite")
+                }
             }
         }
     }
@@ -89,7 +85,7 @@ dependencies {
     api(files("${rootProject.projectDir}/libs/android-car.jar"))
     compileOnly(files("${rootProject.projectDir}/libs/framework-location.jar"))
 
-    api(libs.protobuf.lite)
+//    api(libs.protobuf.lite)
     api(libs.protobuf.javalite)
 
     implementation(project(":car-builtin-lib"))

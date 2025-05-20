@@ -18,7 +18,7 @@ syntax = "proto3";
 
 package android.automotive.watchdog;
 
-import "performance_stats.proto";
+import "android/car/watchdog/performance_stats.proto";
 
 // Represents the registered client health check information.
 message HealthCheckClientInfo {

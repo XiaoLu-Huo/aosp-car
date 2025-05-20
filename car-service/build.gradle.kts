@@ -1,4 +1,3 @@
-import com.google.protobuf.gradle.id
 import com.google.protobuf.gradle.proto
 
 plugins {
@@ -41,15 +40,13 @@ protobuf {
     protoc {
         artifact = libs.protoc.protoc.get().toString()
     }
-    plugins {
-        id("javalite") {
-            artifact = libs.protoc.gen.javalite.get().toString()
-        }
-    }
     generateProtoTasks {
-        all().forEach {
-            it.plugins {
-                id("javalite")
+        all().forEach { task ->
+            // For Android, Javalite is recommended for smaller code size.
+            task.builtins {
+                create("java") { // Use 'create' for safer configuration
+                    option("lite")
+                }
             }
         }
     }
@@ -86,7 +83,7 @@ dependencies {
     compileOnly(files("${rootProject.projectDir}/libs/framework-statsd.jar"))
     compileOnly(files("${rootProject.projectDir}/libs/framework-tethering.jar"))
 
-    api(libs.protobuf.lite)
+//    api(libs.protobuf.lite)
     api(libs.protobuf.javalite)
 
     implementation(project(":car-lib"))
