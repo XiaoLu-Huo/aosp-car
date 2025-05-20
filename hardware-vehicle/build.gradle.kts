@@ -46,10 +46,10 @@ afterEvaluate {
     tasks.withType<JavaCompile>().configureEach {
         val customFrameworkJar = rootProject.file("libs/framework.jar")
         val customFrameworkWifiJar = rootProject.file("libs/framework-wifi.jar")
-        val customLocationJar = rootProject.file("libs/framework-location.jar")
+        val customFrameworkStatsdJar = rootProject.file("libs/framework-statsd.jar")
         val customLibs = this.project
             .files(
-                customFrameworkJar, customFrameworkWifiJar, customLocationJar
+                customFrameworkJar, customFrameworkWifiJar, customFrameworkStatsdJar
             )
             .filter { it.exists() }
         if (!customLibs.isEmpty) {
@@ -79,6 +79,7 @@ protobuf {
 
 dependencies {
     api(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
+    compileOnly(files("${rootProject.projectDir}/libs/framework-statsd.jar"))
     implementation(project(":car-builtin-lib"))
 
 
