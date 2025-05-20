@@ -32,6 +32,29 @@ android {
     }
 
     sourceSets["main"].aidl.srcDir("src/main/java")
+
+    buildFeatures {
+        aidl = true
+    }
+}
+
+afterEvaluate {
+    tasks.withType<JavaCompile>().configureEach {
+        val customFrameworkJar = rootProject.file("libs/framework.jar")
+        val customFrameworkWifiJar = rootProject.file("libs/framework-wifi.jar")
+        val customLocationJar = rootProject.file("libs/framework-location.jar")
+        val customLibs = this.project
+            .files(
+                customFrameworkJar, customFrameworkWifiJar, customLocationJar
+            )
+            .filter { it.exists() }
+        if (!customLibs.isEmpty) {
+            classpath = customLibs + classpath
+        } else {
+            println("Warning: Custom JARs not found at specified paths for task ${name}.")
+            println("Searched paths: ${customFrameworkJar.absolutePath}, ${customFrameworkWifiJar.absolutePath}")
+        }
+    }
 }
 
 dependencies {
