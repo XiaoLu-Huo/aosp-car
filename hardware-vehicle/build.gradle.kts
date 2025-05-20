@@ -37,7 +37,28 @@ android {
     sourceSets["main"].proto {
         srcDir("src/main/java")
     }
+    sourceSets["main"].java {
+        srcDirs("src/main/java")
+    }
+}
 
+afterEvaluate {
+    tasks.withType<JavaCompile>().configureEach {
+        val customFrameworkJar = rootProject.file("libs/framework.jar")
+        val customFrameworkWifiJar = rootProject.file("libs/framework-wifi.jar")
+        val customLocationJar = rootProject.file("libs/framework-location.jar")
+        val customLibs = this.project
+            .files(
+                customFrameworkJar, customFrameworkWifiJar, customLocationJar
+            )
+            .filter { it.exists() }
+        if (!customLibs.isEmpty) {
+            classpath = customLibs + classpath
+        } else {
+            println("Warning: Custom JARs not found at specified paths for task ${name}.")
+            println("Searched paths: ${customFrameworkJar.absolutePath}, ${customFrameworkWifiJar.absolutePath}")
+        }
+    }
 }
 
 protobuf {
@@ -58,6 +79,8 @@ protobuf {
 
 dependencies {
     api(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
+    implementation(project(":car-builtin-lib"))
+
 
     api(libs.protobuf.javalite)
 
