@@ -2941,26 +2941,26 @@ public final class WatchdogPerfHandler {
     private static int toProtoUxState(@UxStateType int uxState) {
         switch (uxState) {
             case UX_STATE_NO_DISTRACTION:
-                return PerformanceDump.UX_STATE_NO_DISTRACTION;
+                return PerformanceDump.UxState.UX_STATE_NO_DISTRACTION.getNumber();
             case UX_STATE_USER_NOTIFICATION:
-                return PerformanceDump.UX_STATE_USER_NOTIFICATION;
+                return PerformanceDump.UxState.UX_STATE_USER_NOTIFICATION.getNumber();
             case UX_STATE_NO_INTERACTION:
-                return PerformanceDump.UX_STATE_NO_INTERACTION;
+                return PerformanceDump.UxState.UX_STATE_NO_INTERACTION.getNumber();
             default:
-                return PerformanceDump.UX_STATE_UNSPECIFIED;
+                return PerformanceDump.UxState.UX_STATE_UNSPECIFIED.getNumber();
         }
     }
 
     private static int toProtoKillableState(@KillableState int killableState) {
         switch (killableState) {
             case KILLABLE_STATE_YES:
-                return PerformanceDump.KILLABLE_STATE_YES;
+                return PerformanceDump.KillableState.KILLABLE_STATE_YES.getNumber();
             case KILLABLE_STATE_NO:
-                return PerformanceDump.KILLABLE_STATE_NO;
+                return PerformanceDump.KillableState.KILLABLE_STATE_NO.getNumber();
             case KILLABLE_STATE_NEVER:
-                return PerformanceDump.KILLABLE_STATE_NEVER;
+                return PerformanceDump.KillableState.KILLABLE_STATE_NEVER.getNumber();
             default:
-                return PerformanceDump.KILLABLE_STATE_UNSPECIFIED;
+                return PerformanceDump.KillableState.KILLABLE_STATE_UNSPECIFIED.getNumber();
         }
     }
 
