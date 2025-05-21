@@ -51,6 +51,7 @@ afterEvaluate {
 
 dependencies {
     compileOnly(files("${rootProject.projectDir}/libs/framework.jar"))
+    compileOnly(files("${rootProject.projectDir}/libs/car-admin-ui-lib.jar"))
 
     implementation(project(":car-lib"))
     implementation(project(":car-builtin-lib"))
