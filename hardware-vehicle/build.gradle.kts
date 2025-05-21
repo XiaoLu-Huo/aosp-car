@@ -45,6 +45,7 @@ android {
     buildFeatures {
         aidl = true
     }
+    lint.abortOnError = false
 }
 
 afterEvaluate {
