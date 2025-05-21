@@ -57,16 +57,6 @@ protobuf {
 }
 
 
-afterEvaluate {
-    tasks.withType<JavaCompile>().configureEach {
-        dependsOn("modifyProtoFiles")
-    }
-
-//    // 可选：如果遇到问题可以添加preBuild依赖
-//    tasks.named("preBuild").configure {
-//        dependsOn("modifyProtoFields")
-//    }
-}
 
 afterEvaluate {
     tasks.withType<JavaCompile>().configureEach {
@@ -121,8 +111,18 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
 }
 
+
+afterEvaluate {
+    tasks.withType<JavaCompile>().configureEach {
+        dependsOn("modifyProtoFiles")
+    }
+}
 // 定义自定义任务来执行 Python 脚本
 val modifyProtoFiles by tasks.register<Exec>("modifyProtoFiles") {
     dependsOn("generateDebugProto") // 明确依赖 Proto 生成任务
-    commandLine("python3", "${project.rootDir}/scripts/process_java_file_for_proto.py", "build/generated/source/proto/debug/java")
+    commandLine("python3",
+        "${project.rootDir}/scripts/process_java_file_for_proto.py",
+        "build/generated/source/proto/debug/java",
+        "--exclude", "com/android/car/telemetry/AtomsProto.java"  // 需要排除的特定文件
+    )
 }
