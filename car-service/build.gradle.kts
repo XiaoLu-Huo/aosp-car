@@ -11,7 +11,7 @@ android {
     compileSdk = 35
 
     defaultConfig {
-        minSdk = 24
+        minSdk = 33
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
@@ -54,6 +54,18 @@ protobuf {
             }
         }
     }
+}
+
+
+afterEvaluate {
+    tasks.withType<JavaCompile>().configureEach {
+        dependsOn("modifyProtoFiles")
+    }
+
+//    // 可选：如果遇到问题可以添加preBuild依赖
+//    tasks.named("preBuild").configure {
+//        dependsOn("modifyProtoFields")
+//    }
 }
 
 afterEvaluate {
@@ -107,4 +119,10 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+}
+
+// 定义自定义任务来执行 Python 脚本
+val modifyProtoFiles by tasks.register<Exec>("modifyProtoFiles") {
+    dependsOn("generateDebugProto") // 明确依赖 Proto 生成任务
+    commandLine("python3", "${project.rootDir}/scripts/process_java_file_for_proto.py", "build/generated/source/proto/debug/java")
 }
