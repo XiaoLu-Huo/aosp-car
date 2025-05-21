@@ -345,7 +345,7 @@ final class CarZonesAudioFocus extends AudioPolicy.AudioPolicyFocusListener {
     @ExcludeFromCodeCoverageGeneratedReport(reason = DUMP_INFO)
     public void dumpProto(ProtoOutputStream proto) {
         long focusHandlerToken = proto.start(CarAudioDumpProto.FOCUS_HANDLER);
-        proto.write(CarAudioZoneFocusProto.HAS_FOCUS_CALLBACK, mCarFocusCallback != null);
+        proto.write(CarAudioZoneFocusProto.HASFOCUSCALLBACK, mCarFocusCallback != null);
         for (int i = 0; i < mFocusZones.size(); i++) {
             mFocusZones.valueAt(i).dumpProto(proto);
         }
