@@ -180,7 +180,7 @@ public final class OveruseConfigurationCache {
             for (int i = 0; i < mIoThresholdsBySystemPackages.size(); i++) {
                 long ioThresholdByPackageToken = proto.start(
                         OveruseConfigurationCacheDump.IO_THRESHOLDS_BY_PACKAGE);
-                proto.write(IoThresholdByPackage.PACKAGE_TYPE, PerformanceDump.SYSTEM);
+                proto.write(IoThresholdByPackage.PACKAGE_TYPE, PerformanceDump.ComponentType.SYSTEM.getNumber());
                 long perStateBytesToken = proto.start(IoThresholdByComponent.THRESHOLD);
                 PerStateBytes perStateBytes = mIoThresholdsBySystemPackages.valueAt(i);
                 proto.write(PerformanceDump.PerStateBytes.FOREGROUND_BYTES,
@@ -198,7 +198,7 @@ public final class OveruseConfigurationCache {
             for (int i = 0; i < mIoThresholdsByVendorPackages.size(); i++) {
                 long ioThresholdByPackageToken = proto.start(
                         OveruseConfigurationCacheDump.IO_THRESHOLDS_BY_PACKAGE);
-                proto.write(IoThresholdByPackage.PACKAGE_TYPE, PerformanceDump.VENDOR);
+                proto.write(IoThresholdByPackage.PACKAGE_TYPE, PerformanceDump.ComponentType.VENDOR.getNumber());
                 long perStateBytesToken = proto.start(IoThresholdByComponent.THRESHOLD);
                 PerStateBytes perStateBytes = mIoThresholdsByVendorPackages.valueAt(i);
                 proto.write(PerformanceDump.PerStateBytes.FOREGROUND_BYTES,
@@ -458,26 +458,26 @@ public final class OveruseConfigurationCache {
     private static int toProtoApplicationCategory(@ApplicationCategoryType int type) {
         switch (type) {
             case ApplicationCategoryType.MAPS:
-                return PerformanceDump.MAPS;
+                return PerformanceDump.ApplicationCategory.MAPS.getNumber();
             case ApplicationCategoryType.MEDIA:
-                return PerformanceDump.MEDIA;
+                return PerformanceDump.ApplicationCategory.MEDIA.getNumber();
             case ApplicationCategoryType.OTHERS:
-                return PerformanceDump.OTHERS;
+                return PerformanceDump.ApplicationCategory.OTHERS.getNumber();
             default:
-                return PerformanceDump.APPLICATION_CATEGORY_UNSPECIFIED;
+                return PerformanceDump.ApplicationCategory.APPLICATION_CATEGORY_UNSPECIFIED.getNumber();
         }
     }
 
     private static int toProtoComponentType(@ComponentType int type) {
         switch (type) {
             case ComponentType.SYSTEM:
-                return PerformanceDump.SYSTEM;
+                return PerformanceDump.ComponentType.SYSTEM.getNumber();
             case ComponentType.VENDOR:
-                return PerformanceDump.VENDOR;
+                return PerformanceDump.ComponentType.VENDOR.getNumber();
             case ComponentType.THIRD_PARTY:
-                return PerformanceDump.THIRD_PARTY;
+                return PerformanceDump.ComponentType.THIRD_PARTY.getNumber();
             default:
-                return PerformanceDump.COMPONENT_TYPE_UNSPECIFIED;
+                return PerformanceDump.ComponentType.COMPONENT_TYPE_UNSPECIFIED.getNumber();
         }
     }
 
