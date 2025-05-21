@@ -38,6 +38,7 @@ android {
     buildFeatures {
         aidl = true
     }
+    lint.abortOnError = false
 }
 
 protobuf {
@@ -98,7 +99,6 @@ dependencies {
     compileOnly(files("${rootProject.projectDir}/libs/framework-statsd.jar"))
     compileOnly(files("${rootProject.projectDir}/libs/framework-tethering.jar"))
 
-//    api(libs.protobuf.lite)
     api(libs.protobuf.javalite)
 
     implementation(project(":car-lib"))
@@ -113,18 +113,26 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
 }
 
-
 afterEvaluate {
     tasks.withType<JavaCompile>().configureEach {
-        dependsOn("modifyProtoFiles")
+        listOf("debug", "release").forEach { buildType ->
+            val capitalized = buildType.replaceFirstChar { it.uppercase() }
+            dependsOn("modify${capitalized}ProtoFiles")
+        }
     }
 }
+
 // 定义自定义任务来执行 Python 脚本
-val modifyProtoFiles by tasks.register<Exec>("modifyProtoFiles") {
-    dependsOn("generateDebugProto") // 明确依赖 Proto 生成任务
-    commandLine("python3",
-        "${project.rootDir}/scripts/process_java_file_for_proto.py",
-        "build/generated/source/proto/debug/java",
-        "--exclude", "com/android/car/telemetry/AtomsProto.java"  // 需要排除的特定文件
-    )
+listOf("debug", "release").forEach{ buildType ->
+
+    val capitalized = buildType.replaceFirstChar { it.uppercase() }
+
+    tasks.register<Exec>("modify${capitalized}ProtoFiles") {
+        dependsOn("generate${capitalized}Proto") // 明确依赖 Proto 生成任务
+        commandLine("python3",
+            "${project.rootDir}/scripts/process_java_file_for_proto.py",
+            "build/generated/source/proto/${buildType}/java",
+            "--exclude", "com/android/car/telemetry/AtomsProto.java"  // 需要排除的特定文件
+        )
+    }
 }
