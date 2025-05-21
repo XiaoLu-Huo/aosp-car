@@ -3,6 +3,10 @@
   <component name="CompilerConfiguration">
     <bytecodeTargetLevel target="11">
       <module name="CarService.car-lib-1" target="21" />
+      <module name="CarService.car-service-builtin.test" target="17" />
+      <module name="CarService.car-service-builtin1" target="17" />
+      <module name="CarService.car-service-builtin1.main" target="17" />
+      <module name="CarService.car-service-builtin1.test" target="17" />
     </bytecodeTargetLevel>
   </component>
 </project>
