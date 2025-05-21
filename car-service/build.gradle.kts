@@ -65,13 +65,15 @@ afterEvaluate {
         val customLocationJar = rootProject.file("libs/framework-location.jar")
         val customBluetoothJar = rootProject.file("libs/framework-bluetooth.jar")
         val customConnectivityJar = rootProject.file("libs/framework-connectivity.jar")
+        val customConnectivityTJar = rootProject.file("libs/framework-connectivity-t.jar")
         val customLibs = this.project
             .files(
                 customFrameworkJar,
                 customFrameworkWifiJar,
                 customLocationJar,
                 customBluetoothJar,
-                customConnectivityJar
+                customConnectivityJar,
+                customConnectivityTJar
             )
             .filter { it.exists() }
         if (!customLibs.isEmpty) {
