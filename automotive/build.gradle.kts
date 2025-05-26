@@ -27,15 +27,21 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "11"
+        jvmTarget = "17"
     }
 }
 
 dependencies {
+    implementation(project(":car-service-builtin"))
+    implementation(project(":car-service"))
+    implementation(project(":car-lib"))
+    implementation(project(":car-builtin-lib"))
+    implementation(project(":hardware-vehicle"))
+    implementation(project(":procfs-inspector"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)

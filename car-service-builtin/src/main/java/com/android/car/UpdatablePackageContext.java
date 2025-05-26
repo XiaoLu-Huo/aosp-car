@@ -75,12 +75,13 @@ public final class UpdatablePackageContext extends ContextWrapper {
     @Nullable
     private static PackageInfo findUpdatableServicePackage(Context baseContext) {
         PackageInfo info = null;
-        String packageName = SystemProperties.get(
-                PROPERTY_CAR_SERVICE_PACKAGE_NAME, /*def=*/null);
-        if (packageName == null) {
-            throw new IllegalStateException(
-                    PROPERTY_CAR_SERVICE_PACKAGE_NAME + " property not defined");
-        }
+//        String packageName = SystemProperties.get(
+//                PROPERTY_CAR_SERVICE_PACKAGE_NAME, /*def=*/null);
+//        if (packageName == null) {
+//            throw new IllegalStateException(
+//                    PROPERTY_CAR_SERVICE_PACKAGE_NAME + " property not defined");
+//        }
+        String packageName = "com.android.car";
         try {
             info = baseContext.getPackageManager().getPackageInfo(packageName, /* flags= */ 0);
         } catch (PackageManager.NameNotFoundException e) {
