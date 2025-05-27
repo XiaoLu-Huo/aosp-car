@@ -79,7 +79,7 @@ public final class UpdatablePackageContext extends ContextWrapper {
 //            throw new IllegalStateException(
 //                    PROPERTY_CAR_SERVICE_PACKAGE_NAME + " property not defined");
 //        }
-        String packageName = "com.android.car";
+        String packageName = "com.android.car.updatable";
         try {
             info = baseContext.getPackageManager().getPackageInfo(packageName, /* flags= */ 0);
         } catch (PackageManager.NameNotFoundException e) {
