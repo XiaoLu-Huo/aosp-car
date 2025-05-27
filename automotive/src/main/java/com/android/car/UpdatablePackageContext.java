@@ -16,8 +16,6 @@
 
 package com.android.car;
 
-import static android.car.builtin.content.pm.PackageManagerHelper.PROPERTY_CAR_SERVICE_PACKAGE_NAME;
-
 import android.annotation.NonNull;
 import android.annotation.Nullable;
 import android.car.builtin.content.pm.PackageManagerHelper;

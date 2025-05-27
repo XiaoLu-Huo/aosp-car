@@ -38,7 +38,7 @@ public final class EvsHalWrapperImpl extends EvsHalWrapper {
         System.loadLibrary("carservicejni");
     }
 
-    private final EvsHalWrapper.HalEventCallback mCallback;
+    private final HalEventCallback mCallback;
 
     private final Object mLock = new Object();
 
@@ -47,7 +47,7 @@ public final class EvsHalWrapperImpl extends EvsHalWrapper {
     private long mNativeEvsServiceObj;
 
     /** Constructor */
-    public EvsHalWrapperImpl(EvsHalWrapper.HalEventCallback callback) {
+    public EvsHalWrapperImpl(HalEventCallback callback) {
         super();
         mCallback = callback;
     }
@@ -57,8 +57,8 @@ public final class EvsHalWrapperImpl extends EvsHalWrapper {
      * methods.
      */
     @VisibleForTesting
-    static EvsHalWrapperImpl create(EvsHalWrapper.HalEventCallback callback,
-            String jniLibraryName) {
+    static EvsHalWrapperImpl create(HalEventCallback callback,
+                                    String jniLibraryName) {
         System.loadLibrary(jniLibraryName);
         return new EvsHalWrapperImpl(callback);
     }

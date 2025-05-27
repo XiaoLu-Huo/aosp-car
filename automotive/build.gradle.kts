@@ -1,5 +1,5 @@
 plugins {
-    alias(libs.plugins.android.application)
+    alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
 }
 
@@ -8,13 +8,10 @@ android {
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.android.car"
-        minSdk = 34
-        targetSdk = 35
-        versionCode = 1
-        versionName = "1.0"
+        minSdk = 33
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles("consumer-rules.pro")
     }
 
     buildTypes {
@@ -33,18 +30,37 @@ android {
     kotlinOptions {
         jvmTarget = "17"
     }
+    lint.abortOnError = false
+}
+
+afterEvaluate {
+    tasks.withType<JavaCompile>().configureEach {
+        val customFrameworkJar = rootProject.file("libs/framework.jar")
+        val customLibs = this.project
+            .files(
+                customFrameworkJar
+            )
+            .filter { it.exists() }
+        if (!customLibs.isEmpty) {
+            classpath = customLibs + classpath
+        } else {
+            println("Warning: Custom JARs not found at specified paths for task ${name}.")
+            println("Searched paths: ${customFrameworkJar.absolutePath}")
+        }
+    }
 }
 
 dependencies {
-    implementation(project(":car-service-builtin"))
-    implementation(project(":car-service"))
+    compileOnly(files("${rootProject.projectDir}/libs/framework.jar"))
+    compileOnly(files("${rootProject.projectDir}/libs/car-admin-ui-lib.jar"))
+
     implementation(project(":car-lib"))
     implementation(project(":car-builtin-lib"))
-    implementation(project(":hardware-vehicle"))
-    implementation(project(":procfs-inspector"))
+    implementation(project(":car-service"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
+    implementation(libs.material)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

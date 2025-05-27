@@ -15,8 +15,7 @@
 -->
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:androidprv="http://schemas.android.com/apk/prv/res/android"
-        package="android.car" >
+        xmlns:androidprv="http://schemas.android.com/apk/prv/res/android">
 
     <!-- Allows car service (CarOccupantConnectionService) to bind to the AbstractReceiverService in
          apps. Should never be needed for normal apps.

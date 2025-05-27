@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "com.android.car"
+    namespace = "com.android.car.procfs.inspector"
     compileSdk = 35
 
     defaultConfig {
