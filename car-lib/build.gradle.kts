@@ -82,7 +82,7 @@ dependencies {
     compileOnly(files("${rootProject.projectDir}/libs/framework.jar"))
     compileOnly(files("${rootProject.projectDir}/libs/framework-wifi.jar"))
     compileOnly(files("${rootProject.projectDir}/libs/core-libart.jar"))
-    api(files("${rootProject.projectDir}/libs/android-car.jar"))
+    compileOnly(files("${rootProject.projectDir}/libs/android-car.jar"))
     compileOnly(files("${rootProject.projectDir}/libs/framework-location.jar"))
 
 //    api(libs.protobuf.lite)

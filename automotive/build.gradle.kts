@@ -1,5 +1,5 @@
 plugins {
-    alias(libs.plugins.android.library)
+    alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
 }
 
@@ -11,7 +11,6 @@ android {
         minSdk = 33
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        consumerProguardFiles("consumer-rules.pro")
     }
 
     buildTypes {
@@ -53,6 +52,7 @@ afterEvaluate {
 dependencies {
     compileOnly(files("${rootProject.projectDir}/libs/framework.jar"))
     compileOnly(files("${rootProject.projectDir}/libs/car-admin-ui-lib.jar"))
+    compileOnly(files("${rootProject.projectDir}/libs/android-car.jar"))
 
     implementation(project(":car-lib"))
     implementation(project(":car-builtin-lib"))
